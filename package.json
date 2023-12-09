@@ -1,6 +1,6 @@
 {
   "name": "hyxa",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A simple static blog generator inspired by Hexo",
   "main": "src/index.ts",
   "scripts": {
