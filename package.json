@@ -7,7 +7,7 @@
     "build": "rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript"
   },
   "bin": {
-    "hyxa": "dist/main.esm.js"
+    "hyxa": "dist/main.mjs"
   },
   "keywords": [
     "website",
