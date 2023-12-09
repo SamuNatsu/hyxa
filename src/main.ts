@@ -31,7 +31,7 @@ program
 
 program
   .command('init [dir]')
-  .description('initialize a folder for Hyx')
+  .description('initialize a folder for Hyxa')
   .action((dir?: string): void => {
     init(path.resolve(dir ?? '.'));
   });
@@ -46,9 +46,8 @@ program
 program
   .command('~post <ID>')
   .description('delete existed post')
-  .option('-h, --hard', 'hard delete')
-  .action((id: string, opts: any): void => {
-    delPost(id, opts.hard ?? false);
+  .action((id: string): void => {
+    delPost(id, true);
   });
 
 program
