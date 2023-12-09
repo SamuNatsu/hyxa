@@ -34,5 +34,5 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
-        name: aqua-toolkit-node-${{ matrix.node-version }}
+        name: hyxa-node-${{ matrix.node-version }}
         path: dist/*
