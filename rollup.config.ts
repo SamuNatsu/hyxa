@@ -9,12 +9,12 @@ import json from '@rollup/plugin-json';
 export default defineConfig({
   input: 'src/main.ts',
   output: {
-    file: 'dist/main.esm.js',
+    file: 'dist/main.mjs',
     format: 'esm'
   },
   plugins: [
     shebang({
-      include: ['**/*.js']
+      include: ['**/*.mjs']
     }),
     terser(),
     typescript(),
