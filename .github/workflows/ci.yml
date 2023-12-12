@@ -33,9 +33,6 @@ jobs:
     - name: Build distribution
       run: pnpm run build
 
-    - name: Copy build to repository
-      run: cp dist/main.mjs ${{ github.workspace }}/dist/main.mjs
-
     - name: Commit and push changes
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
