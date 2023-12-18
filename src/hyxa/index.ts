@@ -8,14 +8,14 @@ import { Collection } from './collection';
 import { Config } from './config';
 import chalk from 'chalk';
 import { Post } from './post';
-import pako from 'pako';
+import { Theme } from './theme';
+import lodash from 'lodash';
 
 /* Export class */
 export class Hyx {
   // Properties
   public baseDir: string;
   public postDir: string;
-  public themeDir: string;
   public publicDir: string;
   public distDir: string;
 
@@ -23,6 +23,7 @@ export class Hyx {
   public dbPath: string;
 
   public config: Config;
+  public theme: Theme;
   public feed: Feed;
 
   public posts: Post[] = [];
@@ -32,7 +33,6 @@ export class Hyx {
     // Get dirs
     this.baseDir = baseDir;
     this.postDir = path.join(baseDir, './posts/');
-    this.themeDir = path.join(baseDir, './themes/');
     this.publicDir = path.join(baseDir, './public/');
     this.distDir = path.join(baseDir, './dist/');
 
@@ -47,11 +47,14 @@ export class Hyx {
     }
     this.config = Config.getInstance();
 
-    // Update theme dir
-    this.themeDir = path.join(this.themeDir, `./${this.config.theme}/`);
-    if (!isFileExists(path.join(this.themeDir, './index.ejs'))) {
-      throw Error('Theme not exists');
-    }
+    // Get theme
+    this.theme = new Theme(
+      path.join(baseDir, `./themes/${this.config.theme}/`)
+    );
+    this.config.themeConfig = lodash.merge(
+      this.theme.defaultConfig,
+      this.config.themeConfig
+    );
 
     // Setup feed
     this.feed = new Feed({
@@ -140,18 +143,17 @@ export class Hyx {
     }
     fs.writeFileSync(path.join(this.distDir, './feed.xml'), this.feed.rss2());
     fs.writeFileSync(path.join(this.distDir, './atom.xml'), this.feed.atom1());
-    console.log(chalk.green('Done'));
+    console.log(chalk.green('  Done'));
 
     // Generate sitemap
-    this.generateSitemap();
+    this.generateSiteDB();
 
     // Link public dirs
     createSymLnk(this.publicDir, this.distDir);
 
     // Link theme public dirs
-    const themePublicDir: string = path.join(this.themeDir, './public/');
-    if (isFolderExists(themePublicDir)) {
-      createSymLnk(themePublicDir, this.distDir);
+    if (isFolderExists(this.theme.publicDir)) {
+      createSymLnk(this.theme.publicDir, this.distDir);
     }
 
     // Print text
@@ -159,8 +161,8 @@ export class Hyx {
   }
 
   // Generate sitemap
-  public generateSitemap(): void {
-    console.log(chalk.cyan('Rendering sitemap'));
+  public generateSiteDB(): void {
+    console.log(chalk.cyan('Rendering site database'));
 
     // Create sitemap
     const sitemap: any = this.posts
@@ -172,17 +174,14 @@ export class Hyx {
         tags: value.tags,
         excerpt: value.excerpt.length === 0 ? undefined : value.excerpt
       }));
-    const rawStr: string = JSON.stringify(sitemap);
-
-    // Compress data
-    const compData: Uint8Array = pako.deflateRaw(rawStr, { level: 9 });
 
     // Write to file
-    fs.writeFileSync(path.join(this.distDir, './sitemap.bin'), compData);
+    fs.writeFileSync(
+      path.join(this.distDir, './sitedb.json'),
+      JSON.stringify(sitemap)
+    );
 
     // Print text
-    console.log(chalk.gray(`  Raw size: ${rawStr.length}`));
-    console.log(chalk.gray(`  Compressed size: ${compData.length}`));
-    console.log(chalk.green('Done'));
+    console.log(chalk.green('  Done'));
   }
 }

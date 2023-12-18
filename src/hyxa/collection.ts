@@ -54,16 +54,7 @@ export class Collection extends EventEmitter {
     }
 
     // Get template
-    this.template = path.join(
-      context.themeDir,
-      this.type !== null ? './collection.ejs' : './index.ejs'
-    );
-    if (!isFileExists(this.template)) {
-      console.warn(
-        chalk.yellow(`  Render template not found: ${this.template}`)
-      );
-      this.template = path.join(context.themeDir, './index.ejs');
-    }
+    this.template = context.theme.getTemplate('collection');
 
     // Pagination
     const pages: Post[][] = lodash.chunk(this.posts, context.config.perPage);
@@ -100,7 +91,7 @@ export class Collection extends EventEmitter {
       }
 
       // After write
-      console.log(chalk.green('Done'));
+      console.log(chalk.green('  Done'));
       this.emit('after-write', tmp);
     }
   }

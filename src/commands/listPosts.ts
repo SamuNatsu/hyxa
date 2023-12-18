@@ -21,7 +21,10 @@ export function listPosts(page?: string): void {
 
   // Print data
   for (const i of pages[pg - 1]) {
-    console.log(chalk.bold.cyan(`[[ ${i.title} ]]`), i.draft ? chalk.yellow('*') : '');
+    console.log(
+      chalk.bold.cyan(`[[ ${i.title} ]]`),
+      i.draft ? chalk.yellow('*') : ''
+    );
     console.log(chalk.bold('Route:'), i.route);
     console.log(chalk.bold('Path:'), i.path);
     console.log(chalk.bold('Published at:'), i.publishedAt.toISOString(true));

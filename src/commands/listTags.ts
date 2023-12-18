@@ -9,7 +9,11 @@ export function listTags(): void {
   for (const [name, posts] of Object.entries(Post.tags)) {
     console.log(chalk.bold.cyan(`[[ ${name} ]]`), `(${posts.length})`);
     for (let i = 0; i < posts.length; i++) {
-      console.log(chalk.bold(`(${i + 1})`), posts[i].title, chalk.gray('->', posts[i].path));
+      console.log(
+        chalk.bold(`(${i + 1})`),
+        posts[i].title,
+        chalk.gray('->', posts[i].path)
+      );
     }
   }
 }

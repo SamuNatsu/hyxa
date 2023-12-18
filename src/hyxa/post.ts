@@ -133,16 +133,7 @@ export class Post extends EventEmitter {
     console.log(chalk.cyan(`Rendering post: ${this.path}`));
 
     // Get template
-    this.template = path.join(
-      context.themeDir,
-      `./${this.template ?? 'post'}.ejs`
-    );
-    if (!isFileExists(this.template)) {
-      console.warn(
-        chalk.yellow(`  Render template not found: ${this.template}`)
-      );
-      this.template = path.join(context.themeDir, './index.ejs');
-    }
+    this.template = context.theme.getTemplate(this.template ?? 'post');
 
     // Render to HTML
     this.emit('before-render', this);
@@ -159,7 +150,7 @@ export class Post extends EventEmitter {
     fs.writeFileSync(this.output, this.html);
 
     // After write
-    console.log(chalk.green('Done'));
+    console.log(chalk.green('  Done'));
     this.emit('after-write', this);
   }
 }

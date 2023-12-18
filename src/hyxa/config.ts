@@ -13,7 +13,9 @@ const configSchema: joi.ObjectSchema = joi.object({
   keywords: joi.string().default(''),
   author: joi.string().required(),
   language: joi.string().default('en'),
-  timezone: joi.string().default(Intl.DateTimeFormat().resolvedOptions().timeZone),
+  timezone: joi
+    .string()
+    .default(Intl.DateTimeFormat().resolvedOptions().timeZone),
   url: joi.string().uri().required(),
   per_page: joi.number().integer().default(10).min(1),
   category_map: joi.object().pattern(joi.string(), joi.string()),

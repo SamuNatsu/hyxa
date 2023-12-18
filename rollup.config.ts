@@ -12,12 +12,5 @@ export default defineConfig({
     file: 'dist/main.mjs',
     format: 'esm'
   },
-  plugins: [
-    shebang({
-      include: ['**/*.mjs']
-    }),
-    terser(),
-    typescript(),
-    json()
-  ]
+  plugins: [shebang({ include: ['**/*.mjs'] }), terser(), typescript(), json()]
 });
